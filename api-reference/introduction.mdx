@@ -1,33 +1,86 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: 'API Reference'
+description: 'Complete reference for the Purity Router API endpoints'
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+## Welcome to the Purity Router API
 
-## Welcome
+The Purity Router API provides comprehensive access to prediction market data, analytics, and insights. Our RESTful API allows you to integrate prediction market information into your applications with ease.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+## Base URL
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+All API requests should be made to:
+
+```
+https://api.purity.com
+```
 
 ## Authentication
 
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
+All API endpoints require authentication using Bearer tokens. Include your API key in the Authorization header:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+<Warning>
+Keep your API key secure and never expose it in client-side code or public repositories.
+</Warning>
+
+## Rate Limits
+
+API requests are rate limited to ensure fair usage:
+
+- **Free tier**: 100 requests per minute
+- **Pro tier**: 1,000 requests per minute
+- **Enterprise**: Custom limits available
+
+Rate limit headers are included in all responses:
+
+```http
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 999
+X-RateLimit-Reset: 1640995200
+```
+
+## Response Format
+
+All API responses are returned in JSON format with the following structure:
 
 ```json
-"security": [
-  {
-    "bearerAuth": []
+{
+  "data": [...],
+  "meta": {
+    "total": 100,
+    "page": 1,
+    "per_page": 20
   }
-]
+}
+```
+
+## Error Handling
+
+The API uses standard HTTP status codes to indicate success or failure:
+
+- `200` - Success
+- `400` - Bad Request
+- `401` - Unauthorized
+- `403` - Forbidden
+- `404` - Not Found
+- `429` - Too Many Requests
+- `500` - Internal Server Error
+
+Error responses include detailed information:
+
+```json
+{
+  "error": {
+    "code": "INVALID_PARAMETER",
+    "message": "The 'limit' parameter must be between 1 and 100",
+    "details": {
+      "parameter": "limit",
+      "value": 150
+    }
+  }
+}
 ```
